@@ -1,6 +1,13 @@
 @AuthifyAPI_HostAddress = http://localhost:5142
 
-GET {{AuthifyAPI_HostAddress}}/weatherforecast/
+#GET {{AuthifyAPI_HostAddress}}/weatherforecast/
+#Accept: application/json
+
+POST {{AuthifyAPI_HostAddress}}/api/authify/register
+Content-Type: application/json
 Accept: application/json
 
-###
+{
+  "email": "test@example.com",
+  "password": "MySecurePassword123"
+}
