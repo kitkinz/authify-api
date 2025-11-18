@@ -8,6 +8,6 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "test@example.com",
-  "password": "MySecurePassword123"
+  "email": "test4@example.com",
+  "password": "test12asdasdasA!"
 }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using AuthifyAPI.Models;
+using AuthifyAPI.DTOs;
 using AuthifyAPI.Services;
 
 namespace AuthifyAPI.Controllers;
@@ -16,8 +16,13 @@ public class AuthifyController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> RegisterUser(RegisterRequest registerRequest)
+    public async Task<IActionResult> RegisterUser(RegisterDto registerRequest)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
         var result = await _authifyService.RegisterUser(registerRequest);
         return Ok(result);
     }

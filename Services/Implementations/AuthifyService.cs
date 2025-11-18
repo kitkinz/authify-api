@@ -1,5 +1,6 @@
 ﻿using AuthifyAPI.Data;
 using AuthifyAPI.Models;
+using AuthifyAPI.DTOs;
 using AuthifyAPI.Services.Interfaces;
 
 namespace AuthifyAPI.Services;
@@ -15,7 +16,7 @@ public class AuthifyService
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<RegisterRequest> RegisterUser(RegisterRequest registerRequest)
+    public async Task<RegisterDto> RegisterUser(RegisterDto registerRequest)
     {
         var user = new User
         {

@@ -18,18 +18,3 @@ public class User
     
     public string Role { get; set; } = "User";
 }
-
-public class RegisterRequest
-{
-    [Required]
-    [EmailAddress]
-    public string Email { get; set; }
-    
-    [Required]
-    public string Password { get; set; }
-}
-
-public class UserRequest
-{
-    
-}
