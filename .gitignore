@@ -7,3 +7,12 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+
+# user-specific files
+*.user
+*.userosscache
+*.suo
+
+# user secrets
+**/appsettings.*.json
+secrets.json
