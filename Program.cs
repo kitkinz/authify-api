@@ -1,4 +1,5 @@
 using AuthifyAPI.Data;
+using AuthifyAPI.Repositories;
 using AuthifyAPI.Services;
 using AuthifyAPI.Services.Interfaces;
 using AuthifyAPI.Services.Implementations;
@@ -17,8 +18,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnectionString"));
 });
 
-builder.Services.AddScoped<AuthifyService>();
+builder.Services.AddScoped<IAuthifyService, AuthifyService>();
 builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

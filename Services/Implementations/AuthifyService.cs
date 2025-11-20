@@ -2,34 +2,44 @@
 using AuthifyAPI.Models;
 using AuthifyAPI.DTOs;
 using AuthifyAPI.Services.Interfaces;
+using AuthifyAPI.Repositories;
+using AuthifyAPI.Constants;
 
 namespace AuthifyAPI.Services;
 
-public class AuthifyService
+public class AuthifyService : IAuthifyService
 {
-    private readonly AppDbContext _dbContext;
+    private readonly IUserRepository _userRepository;
     private readonly IPasswordHasherService _passwordHasher;
 
-    public AuthifyService(AppDbContext dbContext, IPasswordHasherService passwordHasher)
+    public AuthifyService(IPasswordHasherService passwordHasher, IUserRepository userRepository)
     {
-        _dbContext = dbContext;
         _passwordHasher = passwordHasher;
+        _userRepository = userRepository;
     }
 
-    public async Task<RegisterDto> RegisterUser(RegisterDto registerRequest)
+    public async Task<ServiceResult<RegisteredUser>> RegisterUser(RegisterDto registerDto)
     {
-        var user = new User
+        if (await _userRepository.EmailExistsAsync(registerDto.Email))
+        {
+            return ServiceResult<RegisteredUser>.FailureResult(ErrorMessages.EMAIL_ALREADY_EXISTS);
+        }
+
+        var user = await _userRepository.CreateUserAsync(new User
         {
             Id = Guid.NewGuid(),
-            Email = registerRequest.Email,
-            PasswordHash = _passwordHasher.HashPassword(registerRequest.Password),
+            Email = registerDto.Email,
+            PasswordHash = _passwordHasher.HashPassword(registerDto.Password),
+            // user for now
             Role = "User"
-            
+        });
+
+        var registeredUser = new RegisteredUser
+        {
+            Email = user.Email,
+            Role = user.Role,
         };
         
-        _dbContext.Users.Add(user);
-        await _dbContext.SaveChangesAsync();
-
-        return registerRequest;
-    } 
+        return ServiceResult<RegisteredUser>.SuccessResult(registeredUser);
+    }
 }

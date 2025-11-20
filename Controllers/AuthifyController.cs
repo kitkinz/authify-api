@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using AuthifyAPI.DTOs;
-using AuthifyAPI.Services;
+using AuthifyAPI.Constants;
+using AuthifyAPI.Services.Interfaces;
 
 namespace AuthifyAPI.Controllers;
 
@@ -8,9 +9,9 @@ namespace AuthifyAPI.Controllers;
 [Route("api/[controller]")]
 public class AuthifyController : ControllerBase
 {
-    private readonly AuthifyService _authifyService;
+    private readonly IAuthifyService _authifyService;
 
-    public AuthifyController(AuthifyService authifyService)
+    public AuthifyController(IAuthifyService authifyService)
     {
         _authifyService = authifyService;
     }
@@ -22,8 +23,19 @@ public class AuthifyController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        
+
         var result = await _authifyService.RegisterUser(registerRequest);
-        return Ok(result);
+
+        if (result.Success)
+        {
+            return Ok(result.Data);
+        }
+
+        if (result.ErrorMessage == ErrorMessages.EMAIL_ALREADY_EXISTS)
+        {
+            return Conflict(result.ErrorMessage);
+        }
+
+        return BadRequest(result.ErrorMessage);
     }
 }
