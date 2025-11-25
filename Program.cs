@@ -3,9 +3,13 @@ using AuthifyAPI.Repositories;
 using AuthifyAPI.Services;
 using AuthifyAPI.Services.Interfaces;
 using AuthifyAPI.Services.Implementations;
+using AuthifyAPI.Settings;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("JwtSettings"));
 
 builder.Services.AddControllers();
 
@@ -21,6 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IAuthifyService, AuthifyService>();
 builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 var app = builder.Build();
 
