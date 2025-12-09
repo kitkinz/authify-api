@@ -6,7 +6,7 @@ using AuthifyAPI.Services.Interfaces;
 namespace AuthifyAPI.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthifyController : ControllerBase
 {
     private readonly IAuthifyService _authifyService;
@@ -37,5 +37,23 @@ public class AuthifyController : ControllerBase
         }
 
         return BadRequest(result.ErrorMessage);
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LoginUser(LoginDto loginRequest)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var result = await _authifyService.LoginUser(loginRequest);
+
+        if (!result.Success)
+        {
+            return Unauthorized(result.ErrorMessage);
+        }
+
+        return Ok(result.Data);
     }
 }

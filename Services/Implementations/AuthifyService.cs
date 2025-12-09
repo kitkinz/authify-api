@@ -11,11 +11,13 @@ public class AuthifyService : IAuthifyService
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasherService _passwordHasher;
+    private readonly IJwtService _jwtService;
 
-    public AuthifyService(IPasswordHasherService passwordHasher, IUserRepository userRepository)
+    public AuthifyService(IPasswordHasherService passwordHasher, IUserRepository userRepository, IJwtService jwtService)
     {
         _passwordHasher = passwordHasher;
         _userRepository = userRepository;
+        _jwtService = jwtService;
     }
 
     public async Task<ServiceResult<RegisteredUser>> RegisterUser(RegisterDto registerDto)
@@ -39,7 +41,34 @@ public class AuthifyService : IAuthifyService
             Email = user.Email,
             Role = user.Role,
         };
-        
+
         return ServiceResult<RegisteredUser>.SuccessResult(registeredUser);
+    }
+
+    public async Task<ServiceResult<LoginResponseDto>> LoginUser(LoginDto loginDto)
+    {
+        var user = await _userRepository.GetUserByEmailAsync(loginDto.Email);
+
+        if (user == null)
+        {
+            return ServiceResult<LoginResponseDto>.FailureResult(ErrorMessages.INVALID_CREDENTIALS);
+        }
+
+        if (!_passwordHasher.VerifyPassword(user.PasswordHash, loginDto.Password))
+        {
+            return ServiceResult<LoginResponseDto>.FailureResult(ErrorMessages.INVALID_CREDENTIALS);
+        }
+
+        var loggedInUser = new LoginResponseDto
+        {
+            Token = _jwtService.GenerateJwtToken(user.Id, user.Email, user.Role),
+            User = new RegisteredUser()
+            {
+                Email = user.Email,
+                Role = user.Role,
+            }
+        };
+
+        return ServiceResult<LoginResponseDto>.SuccessResult(loggedInUser);
     }
 }
