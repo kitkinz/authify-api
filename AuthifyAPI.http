@@ -3,11 +3,11 @@
 #GET {{AuthifyAPI_HostAddress}}/weatherforecast/
 #Accept: application/json
 
-POST {{AuthifyAPI_HostAddress}}/api/authify/register
+GET {{AuthifyAPI_HostAddress}}/api/auth/protected
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjExYzgwYmEyLWRkMTAtNDhjZi05YWRhLTY1NDFkMWUwMDUyMSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6InRlc3Q2QGV4YW1wbGUuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTc2NTM1NDM1MywiaXNzIjoiQXV0aGlmeUFQSSIsImF1ZCI6IkF1dGhpZnlBUEkifQ.0Xn3Ldlvfw2LOqd8Pf-Pu9gwn9fKe3LAFdKrWKjZBsc
 
 {
-  "email": "test5@example.com",
-  "password": "tes123tasdasdasA!"
+  "email": "test6@example.com"
 }

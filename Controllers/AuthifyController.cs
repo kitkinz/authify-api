@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using AuthifyAPI.DTOs;
 using AuthifyAPI.Constants;
 using AuthifyAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AuthifyAPI.Controllers;
 
@@ -55,5 +57,22 @@ public class AuthifyController : ControllerBase
         }
 
         return Ok(result.Data);
+    }
+
+    [Authorize]
+    [HttpGet("protected")]
+    public IActionResult GetProtectedData()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var email = User.FindFirst(ClaimTypes.Email)?.Value;
+        var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+        return Ok(new
+        {
+            Message = "You have access to protected data!",
+            UserId = userId,
+            Email = email,
+            Role = role
+        });
     }
 }
