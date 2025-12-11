@@ -39,6 +39,11 @@ builder.Services.AddAuthentication(options =>
     {
         var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
+        if (jwtSettings == null)
+        {
+            throw new Exception("JWT settings not found");
+        }
+        
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
