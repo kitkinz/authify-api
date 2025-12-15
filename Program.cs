@@ -1,5 +1,6 @@
 using System.Text;
 using AuthifyAPI.Data;
+using AuthifyAPI.Middleware;
 using AuthifyAPI.Repositories;
 using AuthifyAPI.Services;
 using AuthifyAPI.Services.Interfaces;
@@ -57,6 +58,8 @@ builder.Services.AddAuthentication(options =>
     });
 
 var app = builder.Build();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
