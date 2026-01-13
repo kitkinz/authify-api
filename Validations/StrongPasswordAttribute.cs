@@ -16,7 +16,7 @@ public class StrongPasswordAttribute : ValidationAttribute
 
         if (password.Length < 8)
         {
-            errorMessage = "Password must be at least 8 characters long.";    
+            errorMessage = "Password must be at least 8 characters long";    
         }
         else if (!password.Any(char.IsUpper))
         {
